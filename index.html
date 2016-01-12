@@ -1,0 +1,2305 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>eMailChef internal API</title>
+
+    <link href="stylesheets/screen.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" type="text/css" media="print" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+      <script src="javascripts/all.js" type="text/javascript"></script>
+
+      <script>
+        $(function() {
+          setupLanguages(["json"]);
+        });
+      </script>
+  </head>
+
+  <body class="index">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+      <img src="images/logo.png" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="json">Request/Response details</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc">
+      </div>
+        <ul class="toc-footer">
+            <li><a href='https://app.emailchef.com' target="_blank">Go to eMailChef application</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <h1 id="getting-started">Getting started</h1>
+
+<h2 id="data-interchange-format"> Data interchange format</h2>
+
+<p>For the most part (and where not otherwise explicit) eMailChef’s API uses JSON as the data format of choice when it comes to request and response bodies.</p>
+
+<h2 id="accessing-resources">Accessing resources</h2>
+
+<p>Authorization to access a user’s resource is granted to clients provided they set a <code class="prettyprint">authkey</code> header into their request, valued with the proper authentication key issued by eMailChef servers. The authentication key is user-based and it is issued by eMailChef servers upon successful user’s email address + password challenge, performed by means of appropriate request (see “Authentication” and “Limitations” section).</p>
+
+<p>As an example, such header should look like what follows:</p>
+
+<p><code class="prettyprint">authkey: 724ee2fef00ffdc91c9b6cff40a9a122a2e7e77d</code></p>
+
+<h3 id="error-scenarios-while-accessing-resources">Error scenarios while accessing resources</h3>
+
+<p>1. <strong>Unauthorized</strong></p>
+
+<p>Whenever the authentication key is invalid or missing, any API request towards eMailChef servers will fail with the status shown aside.</p>
+
+<p>Response to unauthorized request:</p>
+
+<p>HTTP Status code: <code class="prettyprint">401</code></p>
+
+<p>Response body: <code class="prettyprint">Unauthorized</code></p>
+
+<p><em>NOTE: It’s important to remember that the response message is given as plain text in this case.</em></p>
+
+<p>2. <strong>Resource not found</strong></p>
+
+<p>Whenever a resource’s instance is requested, but it reveals to be outside of client’s scope (i.e.: either inexistent or not belonging to), such request will fail with the following status:</p>
+
+<p>HTTP Status code: <code class="prettyprint">404</code></p>
+
+<p>Response body:</p>
+
+<p><code class="prettyprint">
+{
+    &quot;status&quot;: &quot;ERROR&quot;,
+    &quot;message&quot;: &quot;resource_not_found&quot;
+}
+</code></p>
+
+<p><em>This does not apply to resource collections where, under the same conditions, an empty array (<code class="prettyprint">[]</code>) is returned.</em>     </p>
+
+          <h1 id="meta-resources">Meta Resources</h1>
+
+<p>This section documents those resources which represent a pre-requirement and are necessary for higher level resources to be set and given and functionalities to work properly. </p>
+
+<h2 id="application">Application</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/meta/application HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/meta/application">link</a></p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"mode"</span><span class="p">:</span><span class="s2">"production"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"hide_poor_growth_stats"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"debug"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"avangate"</span><span class="p">:{</span><span class="w">
+      </span><span class="nt">"merchant"</span><span class="p">:</span><span class="s2">"NURAXISX"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"confirmUrl"</span><span class="p">:</span><span class="s2">"https:\/\/app.emailchef.com\/customer\/purchase-completed"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"shopUrl"</span><span class="p">:</span><span class="s2">"https:\/\/app.emailchef.com\/build\/#\/settings?section=my_account"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"test"</span><span class="p">:</span><span class="kc">false</span><span class="w">
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="appconfig">Appconfig</h2>
+
+<p>Request endpoint:</p>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/appconfig/appconfig?lang=en HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/appconfig/appconfig?lang=en">link</a>  </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"supported_languages"</span><span class="p">:[</span><span class="w">
+      </span><span class="s2">"en"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"it"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"es"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"de"</span><span class="w">
+   </span><span class="p">],</span><span class="w">
+   </span><span class="nt">"fallback_language"</span><span class="p">:</span><span class="s2">"en"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="i18n">I18N</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/i18n/main_app/:lang_code HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/i18n/main_app/en">link</a>  </p>
+
+<p><code class="prettyprint">lang_code</code> parameter can be one of the <code class="prettyprint">supported_languages</code> collection, as returned by <a href="#appconfig">appconfig</a> call.</p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<aside class="notice">
+<strong>NOTE:</strong> <em>The response body shown here aside is just a convenient subset of the real whole response.</em>
+</aside> 
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">  
+   </span><span class="nt">"emailchef"</span><span class="p">:</span><span class="s2">"eMailChef"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"emailchef_title"</span><span class="p">:</span><span class="s2">"eMailChef - Kitchen"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"dashboard"</span><span class="p">:</span><span class="s2">"dashboard"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"copyright"</span><span class="p">:</span><span class="s2">"Delivery Tech Corp. 4411 Morena Blvd #230 San Diego, C2117."</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"app_description"</span><span class="p">:</span><span class="s2">"eMailChef is the easiest-to-use email marketing service in the world..:"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"dummy_mode"</span><span class="p">:</span><span class="s2">"demo mode"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"welcome"</span><span class="p">:</span><span class="s2">"Welcome"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"hi"</span><span class="p">:</span><span class="s2">"hi"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"yes"</span><span class="p">:</span><span class="s2">"Yes"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="language-names">Language names</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/meta/languagenames HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/meta/languagenames">link</a>  </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+   </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"code"</span><span class="p">:</span><span class="s2">"en"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"nativeName"</span><span class="p">:</span><span class="s2">"English"</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"code"</span><span class="p">:</span><span class="s2">"de"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"nativeName"</span><span class="p">:</span><span class="s2">"Deutsch"</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"code"</span><span class="p">:</span><span class="s2">"it"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"nativeName"</span><span class="p">:</span><span class="s2">"Italiano"</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"code"</span><span class="p">:</span><span class="s2">"es"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"nativeName"</span><span class="p">:</span><span class="s2">"espa\u00f1ol, castellano"</span><span class="w">
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+
+<h2 id="policies">Policies</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/meta/policies/:policy_type HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/meta/policies/safe">link</a>  </p>
+
+<p><code class="prettyprint">policy_type</code> parameter can be one of the following:</p>
+
+<ul>
+<li><code class="prettyprint">safe</code>: policies describing the most conservative account permissions</li>
+<li><code class="prettyprint">standard</code>: policies describing normal account permissions</li>
+<li><code class="prettyprint">premium</code>: policies describing advanced account permissions</li>
+</ul>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"OK"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"safe"</span><span class="p">:{</span><span class="w">
+      </span><span class="nt">"admin_resubscribe"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"global_unsubscribe"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"contact_resubscribe"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"single_optin"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"allow_sending_without_can_spam_tags"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"warn_before_sending_without_can_spam_tags"</span><span class="p">:</span><span class="kc">true</span><span class="w">
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="preferences">Preferences</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/preferences/current HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/preferences/current">link</a>  </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"portlets"</span><span class="p">:[</span><span class="w">
+      </span><span class="s2">"help_short"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"design_your_campaign"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"signup_form"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"sent_campaign_summary"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"account_policy"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"account_summary"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"draft_campaign_summary"</span><span class="w">
+   </span><span class="p">],</span><span class="w">
+   </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"187"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"is_pristine"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"contacts_count"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"sent_campaigns_count"</span><span class="p">:</span><span class="s2">"2"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="segments">Segments</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/meta/segments HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/meta/segments">link</a>  </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<p><strong>NOTE:</strong> <em>The response body shown here aside is just a convenient subset of the real whole response.</em> </p>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"comparables"</span><span class="p">:[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparable_id"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"SUB_DATE"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="s2">"3"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"date"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparable_id"</span><span class="p">:</span><span class="s2">"2"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"SUB_TYPE"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="s2">"5"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"select"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparable_id"</span><span class="p">:</span><span class="s2">"3"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"LAST_NL_DATE"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="s2">"3"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"date"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparable_id"</span><span class="p">:</span><span class="s2">"4"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"LAST_OPEN_DATE"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="s2">"3"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"date"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparable_id"</span><span class="p">:</span><span class="s2">"5"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"LAST_CLICK_DATE"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="s2">"3"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"date"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparable_id"</span><span class="p">:</span><span class="s2">"6"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"EVENT_OPEN"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="s2">"4"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"boolean"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparable_id"</span><span class="p">:</span><span class="s2">"7"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"EVENT_CLICK"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="s2">"4"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"boolean"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+   </span><span class="p">],</span><span class="w">
+   </span><span class="nt">"comparators_types"</span><span class="p">:[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">2</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">5</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">6</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">7</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">8</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">9</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">2</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">5</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">6</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">7</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">8</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">9</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">5</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">9</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">5</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">9</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">5</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">9</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">5</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">9</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">7</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">7</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">5</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">7</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">9</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">8</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">8</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">5</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">8</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">9</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">9</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">9</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">5</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">9</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">9</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">5</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">9</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">11</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">3</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">3</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">13</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">3</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">14</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">4</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">15</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">2</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">16</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">2</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"comparator_id"</span><span class="p">:</span><span class="mi">17</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">3</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+   </span><span class="p">],</span><span class="w">
+   </span><span class="nt">"comparators"</span><span class="p">:[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"IS"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"text"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"IS_NOT"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"text"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"CONTAIN"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"text"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"NOT_CONTAIN"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"text"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"IS_PROVIDED"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"text"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"IS_NOT_PROVIDED"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"text"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">7</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"START_WITH"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"text"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">8</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"END_WITH"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"text"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">9</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"NOT_START_WITH"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"text"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"NOT_END_WITH"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"text"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">11</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"IS_AFTER"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"date"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">3</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"IS_BEFORE"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"date"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">3</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">13</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"IS_DATE"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"date"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">3</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">14</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"HAPPENED"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"boolean"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">4</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">15</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"IS_LESS_THEN"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"number"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">2</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">16</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"IS_GREATER_THEN"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"number"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">2</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">17</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"IS_NOT_DATE"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_name"</span><span class="p">:</span><span class="s2">"date"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"type_id"</span><span class="p">:</span><span class="mi">3</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+   </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="userlog-get-collection">Userlog - get collection</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/userlog?limit=10&amp;offset=0 HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/userlog?limit=10&amp;offset=0">link</a>  </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<aside class="notice">
+<strong>NOTE:</strong> <em>The response body shown here aside is just a convenient subset of the real whole response.</em>
+</aside> 
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+   </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"3293"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"ts"</span><span class="p">:</span><span class="s2">"2015-10-22 09:16:03"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"CampaignSchedule"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"ipaddr"</span><span class="p">:</span><span class="s2">"93.34.48.147"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"session_id"</span><span class="p">:</span><span class="s2">"a71ccb135875d8b73a493f6951bba0fc0a5493b3"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"useragent"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"params"</span><span class="p">:{</span><span class="w">
+         </span><span class="nt">"campaign_id"</span><span class="p">:</span><span class="s2">"1352"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"campaign_name"</span><span class="p">:</span><span class="s2">"Nome campagna 2015-10-22 09:13:48"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"schedule_time"</span><span class="p">:</span><span class="s2">"2015-10-22 11:20:00"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"3292"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"ts"</span><span class="p">:</span><span class="s2">"2015-10-22 09:16:03"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"CampaignEdit"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"ipaddr"</span><span class="p">:</span><span class="s2">"93.34.48.147"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"session_id"</span><span class="p">:</span><span class="s2">"a71ccb135875d8b73a493f6951bba0fc0a5493b3"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"useragent"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"params"</span><span class="p">:{</span><span class="w">
+         </span><span class="nt">"campaign_id"</span><span class="p">:</span><span class="s2">"1352"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"campaign_name"</span><span class="p">:</span><span class="s2">"Nome campagna 2015-10-22 09:13:48"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="err">...</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+
+<h2 id="userlog-get-count">Userlog - get count</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/userlog/count HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/userlog/count">link</a>  </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w"> 
+    </span><span class="nt">"recnum"</span><span class="p">:</span><span class="w"> </span><span class="s2">"23"</span><span class="w"> 
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h1 id="resources">Resources</h1>
+
+<p>This section documents all of those resources which are dedicated to users in order to perform operations within eMailChef.</p>
+
+          <h2 id="account">Account</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/accounts/current HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/accounts/current">link</a>  </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"785510"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"email"</span><span class="p">:</span><span class="s2">"name+908070@mycompany.com"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"lang"</span><span class="p">:</span><span class="s2">"it"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"whiteLabeled"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"relayBounces"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"billing_clientid"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"parentid"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"bounceSuppress"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"domain"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"allowWebsiteAccess"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"total"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"bounce"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"complaints"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"last_update"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"mode"</span><span class="p">:</span><span class="s2">"safe"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"logo_url"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"dummy"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"beta_tester"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"subscribers"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"s_token"</span><span class="p">:</span><span class="s2">"7o226163636s756r745s6964223n22373835353130227q"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h2 id="account-infos-get-instance">Account infos - get instance</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/account_infos/785510 HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/account_infos/785510">link</a>  </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"billingInfo"</span><span class="p">:{</span><span class="w">
+      </span><span class="nt">"firstname"</span><span class="p">:</span><span class="s2">"Lorenzo"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"lastname"</span><span class="p">:</span><span class="s2">"Calcaterra"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"business"</span><span class="p">:</span><span class="s2">"Sleepers Ltd."</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"address_1"</span><span class="p">:</span><span class="s2">"Hell's Kitchen"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"address_2"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"city"</span><span class="p">:</span><span class="s2">"New York"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"postal_code"</span><span class="p">:</span><span class="s2">"10101"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"country"</span><span class="p">:</span><span class="s2">"US"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"region"</span><span class="p">:</span><span class="s2">"NY"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"phone_number"</span><span class="p">:</span><span class="s2">"23233232"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"vat_info"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"website"</span><span class="p">:</span><span class="s2">"http://www.sleepersltd.com"</span><span class="w">
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="account-infos-update-instance">Account infos - update instance</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">POST https://app.emailchef.com/apps/api/v1/account_infos HTTP/1.1</code>   </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Request body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"instance_in"</span><span class="p">:{</span><span class="w">
+      </span><span class="nt">"firstname"</span><span class="p">:</span><span class="s2">"Lorenzo"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"lastname"</span><span class="p">:</span><span class="s2">"Calcaterra"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"business"</span><span class="p">:</span><span class="s2">"Sleepers Ltd."</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"address_1"</span><span class="p">:</span><span class="s2">"Hell's Kitchen"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"address_2"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"city"</span><span class="p">:</span><span class="s2">"New York"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"postal_code"</span><span class="p">:</span><span class="s2">"101010"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"country"</span><span class="p">:</span><span class="s2">"US"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"region"</span><span class="p">:</span><span class="s2">"NY"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"phone_number"</span><span class="p">:</span><span class="s2">"23233232"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"vat_info"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"website"</span><span class="p">:</span><span class="s2">"http://www.sleepersltd.com"</span><span class="w">
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">  
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"OK"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h2 id="lists-get-collection">Lists - get collection</h2>
+
+<p>Returns a collection of lists belonging to the current account. </p>
+
+<p>A list is a container for contacts.</p>
+
+<p>&ndash;</p>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/lists?limit=:limit&amp;offset=:offset&amp;orderby=:orderby&amp;ordertype=:ordertype HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/lists?limit=10&amp;offset=0&amp;orderby=cd&amp;ordertype=d">link</a>  </p>
+
+<ul>
+<li><p><code class="prettyprint">limit</code> parameter is the number of results to return (for a single page), default is 10</p></li>
+<li><p><code class="prettyprint">offset</code> parameter is the number of results to skip prior to start considering results to return, default is 0 </p></li>
+<li><p><code class="prettyprint">orderby</code> parameter represents the results sorting criteria, and can be one of:</p>
+
+<ul>
+<li>cd : creation date (default)</li>
+<li>n  : name<br></li>
+</ul></li>
+<li><p><code class="prettyprint">ordertype</code> parameter represents the sorting type, and can be one of:</p>
+
+<ul>
+<li>a : ascending</li>
+<li>d : descending (default)<br></li>
+</ul></li>
+</ul>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<aside class="notice">
+<strong>NOTE:</strong> <em>The response body shown here aside is just a convenient subset of the real whole response.</em>
+</aside> 
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">  
+   </span><span class="p">{</span><span class="w">  
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"Test List Zero"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"487"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"description"</span><span class="p">:</span><span class="s2">"First list to play with"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"active"</span><span class="p">:</span><span class="s2">"26"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"segments"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"unsubscribed"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"bounced"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"in_newsletter"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"date"</span><span class="p">:</span><span class="s2">"2015-10-08 10:22:09"</span><span class="w">
+   </span><span class="p">},</span><span class="w"> 
+   </span><span class="p">{</span><span class="w">  
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"Test List One"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"488"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"description"</span><span class="p">:</span><span class="s2">"Second list to play with"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"active"</span><span class="p">:</span><span class="s2">"20"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"segments"</span><span class="p">:</span><span class="s2">"2"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"unsubscribed"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"bounced"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"in_newsletter"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"date"</span><span class="p">:</span><span class="s2">"2015-10-09 12:22:09"</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="err">...</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+
+<h2 id="lists-get-instance">Lists - get instance</h2>
+
+<p>Returns a single list&rsquo;s general data. </p>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/lists/:id HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/lists/487">link</a>  </p>
+
+<p><code class="prettyprint">id</code> parameter is the list id      </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">  
+   </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"Test List Zero"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"description"</span><span class="p">:</span><span class="s2">"First list to play with"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"sender_name"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"sender_email"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"creation_date"</span><span class="p">:</span><span class="s2">"2015-10-08 10:22:09"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="lists-get-stats">Lists - get stats</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/lists/487/stats?start_date=:start_date&amp;end_date=:end_date HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/lists/487/stats?start_date=-1&amp;end_date=2015-10-22">link</a>  </p>
+
+<ul>
+<li><p><code class="prettyprint">start_date</code> parameter is a date formatted as &lsquo;YYYY-MM-DD&rsquo;, or <code class="prettyprint">-1</code> meant as &#39;from the very beginning&rsquo;</p></li>
+<li><p><code class="prettyprint">end_date</code> parameter is a date formatted as &#39;YYYY-MM-DD&rsquo;, or <code class="prettyprint">-1</code> meant as &#39;until the very end&rsquo;</p></li>
+</ul>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">  
+   </span><span class="nt">"total_list"</span><span class="p">:[</span><span class="w">  
+      </span><span class="p">{</span><span class="w">  
+         </span><span class="nt">"date"</span><span class="p">:</span><span class="s2">"2015-10-08"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"total"</span><span class="p">:</span><span class="mi">26</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+   </span><span class="p">],</span><span class="w">
+   </span><span class="nt">"daily_delta_list"</span><span class="p">:[</span><span class="w">  
+      </span><span class="p">{</span><span class="w">  
+         </span><span class="nt">"date"</span><span class="p">:</span><span class="s2">"2015-10-08"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"daily_delta"</span><span class="p">:</span><span class="s2">"26"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+   </span><span class="p">],</span><span class="w">
+   </span><span class="nt">"start_date"</span><span class="p">:</span><span class="s2">"2015-10-08"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"last_date"</span><span class="p">:</span><span class="s2">"2015-10-08"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="lists-unsubscribe">Lists - unsubscribe</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/lists/:list_id/unsubscribe?contact_id=:contact_id&amp;list_id=:list_id HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/lists/:list_id/unsubscribe?contact_id=4&amp;list_id=487">link</a>  </p>
+
+<p><code class="prettyprint">contact_id</code> parameter is the id of the contact to unsubscribe</p>
+
+<p><code class="prettyprint">list_id</code> parameter is the id of the list from which the contact has to be unsubscribed</p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"OK"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"message"</span><span class="p">:</span><span class="s2">"recipient_unsubscribed"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="lists-create-instance">Lists - create instance</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">POST https://app.emailchef.com/apps/api/v1/lists HTTP/1.1</code>  </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Request body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"instance_in"</span><span class="p">:{</span><span class="w">
+        </span><span class="nt">"list_name"</span><span class="p">:</span><span class="s2">"Test List 1001"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"list_description"</span><span class="p">:</span><span class="s2">"Ultimate List to be defined"</span><span class="w">  
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"OK"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"list_id"</span><span class="p">:</span><span class="s2">"510"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="lists-update-instance">Lists - update instance</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">PUT https://app.emailchef.com/apps/api/v1/lists/:list_id HTTP/1.1</code>  </p>
+
+<p><code class="prettyprint">list_id</code> parameter represents the id of the resource to be updated </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Request body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"instance_in"</span><span class="p">:{</span><span class="w">
+        </span><span class="nt">"list_name"</span><span class="p">:</span><span class="s2">"Test List Zero"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"list_description"</span><span class="p">:</span><span class="s2">"Ultimate List to be deleted"</span><span class="w">  
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"OK"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"list_id"</span><span class="p">:</span><span class="s2">"510"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="lists-delete-instance">Lists - delete instance</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">DELETE https://app.emailchef.com/apps/api/v1/lists/:list_id HTTP/1.1</code>  </p>
+
+<p><code class="prettyprint">list_id</code> parameter represents the id of the resource to be deleted </p>
+
+<aside class="notice">
+<strong>NOTE:</strong> <em>This request returns an empty response body in case of no errors.</em>
+</aside> 
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Request body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"instance_in"</span><span class="p">:{</span><span class="w">
+        </span><span class="nt">"list_name"</span><span class="p">:</span><span class="s2">"Test List Zero"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"list_description"</span><span class="p">:</span><span class="s2">"Ultimate List to be deleted"</span><span class="w">  
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+          <h2 id="contacts-get-count">Contacts - get count</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/lists/:list_id/contacts/count HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/lists/487/contacts/count">link</a>  </p>
+
+<p><code class="prettyprint">list_id</code> parameter is the id of the list which the counted contacts belong to.</p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">  
+   </span><span class="nt">"active"</span><span class="p">:</span><span class="s2">"26"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"unsubscribed"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"bounced"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"reported"</span><span class="p">:</span><span class="s2">"0"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="contacts-get-collection">Contacts - get collection</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/contacts?status=:status&amp;limit=:limit&amp;list_id=:list_id&amp;offset=:offset&amp;orderby=:orderby&amp;ordertype=:ordertype HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/contacts?status=ACTIVE&amp;limit=10&amp;list_id=487&amp;offset=0&amp;orderby=at&amp;ordertype=a">link</a>  </p>
+
+<ul>
+<li><p><code class="prettyprint">status</code> parameter can be one of the following:</p>
+
+<ul>
+<li><code class="prettyprint">ACTIVE</code></li>
+<li><code class="prettyprint">UNSUBSCRIBED</code></li>
+<li><code class="prettyprint">BOUNCED</code></li>
+<li><code class="prettyprint">REPORTED</code></li>
+</ul></li>
+<li><p><code class="prettyprint">list_id</code> parameter is the id of the list from which contacts are fetched </p></li>
+<li><p><code class="prettyprint">limit</code> parameter is the number of results to return (for a single page), default is 10</p></li>
+<li><p><code class="prettyprint">offset</code> parameter is the number of results to skip prior to start considering results to return, default is 0 </p></li>
+<li><p><code class="prettyprint">orderby</code> parameter represents the results sorting criteria, and can be one of:</p>
+
+<ul>
+<li>e  : email</li>
+<li>n  : name</li>
+<li>ab : added_by</li>
+<li>at : addition_time (default)</li>
+<li>s  : status</li>
+</ul></li>
+<li><p><code class="prettyprint">ordertype</code> parameter represents the sorting type, and can be one of:</p>
+
+<ul>
+<li>a : ascending</li>
+<li>d : descending (default)<br></li>
+</ul></li>
+</ul>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<aside class="notice">
+<strong>NOTE:</strong> <em>The response body shown here aside is just a convenient subset of the real whole response.</em>
+</aside> 
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">  
+   </span><span class="p">{</span><span class="w">  
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"4"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"email"</span><span class="p">:</span><span class="s2">"blackhole3@blackhole.turbo-smtp.com"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"added_by"</span><span class="p">:</span><span class="s2">"ADMIN"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"subscribed"</span><span class="p">:</span><span class="s2">"2015-10-08 10:23:24"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"black3 hole3 "</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"event_time"</span><span class="p">:</span><span class="kc">null</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="p">{</span><span class="w">  
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"2"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"email"</span><span class="p">:</span><span class="s2">"blackhole1@blackhole.turbo-smtp.com"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"added_by"</span><span class="p">:</span><span class="s2">"ADMIN"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"subscribed"</span><span class="p">:</span><span class="s2">"2015-10-08 10:23:24"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"black1 hole1 "</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"event_time"</span><span class="p">:</span><span class="kc">null</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="err">...</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+
+<h2 id="contacts-get-instance">Contacts - get instance</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/contacts/:contact_id?list_id=:list_id HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/contacts/7?list_id=487">link</a>  </p>
+
+<ul>
+<li><p><code class="prettyprint">contact_id</code> parameter is the id of the contact to fetch  </p></li>
+<li><p><code class="prettyprint">list_id</code> parameter is the id of the list which <code class="prettyprint">:contact_id</code> belongs to  </p></li>
+</ul>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">  
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"email"</span><span class="p">:</span><span class="s2">"blackhole6@blackhole.turbo-smtp.com"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"firstname"</span><span class="p">:</span><span class="s2">"black6 hole6"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"lastname"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"ip"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"added_by"</span><span class="p">:</span><span class="s2">"ADMIN"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"addition_time"</span><span class="p">:</span><span class="s2">"2015-10-08 10:23:24"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"customFields"</span><span class="p">:[</span><span class="w">  
+
+   </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="contacts-create-instance">Contacts - create instance</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">POST https://app.emailchef.com/apps/api/v1/contacts  HTTP/1.1</code>  </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<aside class="notice">
+<strong>NOTE:</strong> <em>Dependently on the number of custom fields the list has, the request body can be quite lengthy. Please consider the `custom_fields` request body structure reported here purely as an example and refer to the <a href="#custom-fields-get-collection">Custom Fields section of this document</a></em>
+</aside> 
+
+<blockquote>
+<p>Request body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"instance_in"</span><span class="p">:{</span><span class="w">
+      </span><span class="nt">"list_id"</span><span class="p">:</span><span class="s2">"&lt;list_id&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"&lt;status&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"email"</span><span class="p">:</span><span class="s2">"&lt;email_address&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"firstname"</span><span class="p">:</span><span class="s2">"&lt;first_name&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"lastname"</span><span class="p">:</span><span class="s2">"&lt;last_name&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"custom_fields"</span><span class="p">:{</span><span class="w">
+         </span><span class="nt">"0"</span><span class="p">:{</span><span class="w">
+            </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"&lt;custom_field_id&gt;"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"list_id"</span><span class="p">:</span><span class="s2">"&lt;list_id&gt;"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"&lt;field_name&gt;"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"type_id"</span><span class="p">:</span><span class="s2">"&lt;field_type_id&gt;"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"place_holder"</span><span class="p">:</span><span class="s2">"&lt;field_placeholder&gt;"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"options"</span><span class="p">:</span><span class="s2">"&lt;field_options_if_type_is_select&gt;"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"default_value"</span><span class="p">:</span><span class="s2">"&lt;field_default_value&gt;"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"admin_only"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"ord"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"data_type"</span><span class="p">:</span><span class="s2">"&lt;field_data_type&gt;"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"value"</span><span class="p">:</span><span class="s2">"&lt;field_value&gt;"</span><span class="w">
+         </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nt">"mode"</span><span class="p">:</span><span class="s2">"ADMIN"</span><span class="w">
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+
+<p>NOTE: If contact is already present into the list, <code class="prettyprint">contact_added_to_list</code> key is set to <code class="prettyprint">false</code></p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"contact_added_to_list"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="w"> 
+   </span><span class="nt">"contact_id"</span><span class="p">:</span><span class="s2">"709029"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"contact_status"</span><span class="p">:</span><span class="s2">"ACTIVE"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>Error for unauthorized access to list resource / list resource not existent:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"ERROR"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"message"</span><span class="p">:</span><span class="s2">"unauthorized_request"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="contacts-update-instance">Contacts - update instance</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">PUT https://app.emailchef.com/apps/api/v1/contacts/:contact_id  HTTP/1.1</code>  </p>
+
+<ul>
+<li><code class="prettyprint">contact_id</code> parameter i the id of the contact to update</li>
+</ul>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<aside class="notice">
+<strong>NOTE:</strong> <em>Dependently on the number of custom fields the list has, the request body can be quite lengthy. Please consider the `custom_fields` request body structure reported here purely as an example and refer to the <a href="#custom-fields-get-collection">Custom Fields section of this document</a></em>
+</aside> 
+
+<blockquote>
+<p>Request body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"instance_in"</span><span class="p">:{</span><span class="w">
+      </span><span class="nt">"list_id"</span><span class="p">:</span><span class="s2">"&lt;list_id&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"&lt;contact_status&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"firstname"</span><span class="p">:</span><span class="s2">"&lt;contact_first_name&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"lastname"</span><span class="p">:</span><span class="s2">"&lt;contact_last_name&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"custom_fields"</span><span class="p">:{</span><span class="w">
+         </span><span class="nt">"0"</span><span class="p">:{</span><span class="w">
+            </span><span class="nt">"data_type"</span><span class="p">:</span><span class="s2">"&lt;field_data_type&gt;"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"&lt;field_id&gt;"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"&lt;field_name&gt;"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"options"</span><span class="p">:</span><span class="s2">"&lt;field_options_if_type_is_select&gt;"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"place_holder"</span><span class="p">:</span><span class="s2">"tablet"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"value"</span><span class="p">:</span><span class="s2">"1"</span><span class="w">
+         </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nt">"mode"</span><span class="p">:</span><span class="s2">"ADMIN"</span><span class="w">
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">  
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"OK"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"contact_id"</span><span class="p">:</span><span class="s2">"4"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h2 id="predefined-fields-get-collection">Predefined Fields - get collection</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/predefinedfields HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/predefinedfields">link</a>  </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"-1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"email"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"type_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"place_holder"</span><span class="p">:</span><span class="w"> </span><span class="s2">"email"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CONCAT(`contacts`.`user`, '@', `contacts`.`domain`)"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"mandatory"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"data_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"email"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"-2"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"first_name"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"type_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"place_holder"</span><span class="p">:</span><span class="w"> </span><span class="s2">"first_name"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"`lc`.`firstname`"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"mandatory"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"data_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"text"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"-3"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"last_name"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"type_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"place_holder"</span><span class="p">:</span><span class="w"> </span><span class="s2">"last_name"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"`lc`.`lastname`"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"mandatory"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"data_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"text"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+
+          <h2 id="custom-fields-get-collection">Custom Fields - get collection</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/lists/:list_id/customfields HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/lists/:list_id/customfields">link</a>  </p>
+
+<ul>
+<li><code class="prettyprint">list_id</code> parameter is the id of the list from which custom fields have to be fetched:</li>
+</ul>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<aside class="notice">
+<strong>NOTE:</strong> <em>The response body shown here aside has to be taken as a bare example. Custom fields collection can be conspicuous, depending on how much custom fields (and related eventual options) the authenticated user has defined into the list.</em>
+</aside> 
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1189"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"list_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"251338"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MyNumber1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"type_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"place_holder"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mynumber1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"options"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"default_value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9999"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"admin_only"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"ord"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"data_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"number"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1188"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"list_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"251338"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MyText1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"type_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"place_holder"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mytext1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"options"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"default_value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hello"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"admin_only"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"ord"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"data_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"text"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1191"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"list_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"251338"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MyYesNo1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"type_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"place_holder"</span><span class="p">:</span><span class="w"> </span><span class="s2">"myyesno1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"options"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"default_value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"admin_only"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"ord"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"data_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"boolean"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1192"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"list_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"251338"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MySelect1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"type_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"place_holder"</span><span class="p">:</span><span class="w"> </span><span class="s2">"myselect1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"options"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ferrari"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lamborghini"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Porsche"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mercedes"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Audi"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">],</span><span class="w">
+        </span><span class="nt">"default_value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Porsche"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"admin_only"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"ord"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"data_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"select"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1208"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"list_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"251338"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tablet"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"type_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"place_holder"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tablet"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"options"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"default_value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"admin_only"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"ord"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"data_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"boolean"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1209"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"list_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"251338"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Smartphone2"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"type_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"place_holder"</span><span class="p">:</span><span class="w"> </span><span class="s2">"smartphone2"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"options"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"default_value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"admin_only"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"ord"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"data_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"boolean"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1212"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"list_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"251338"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Smartphone4"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"type_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"place_holder"</span><span class="p">:</span><span class="w"> </span><span class="s2">"smartphone4"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"options"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"default_value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"admin_only"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"ord"</span><span class="p">:</span><span class="w"> </span><span class="s2">"8"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"data_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"text"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+
+<h2 id="custom-fields-get-instance">Custom Fields - get instance</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/customfields/:field_id HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/customfields/361">link</a>  </p>
+
+<ul>
+<li><code class="prettyprint">field_id</code> parameter is the id of the field to get</li>
+</ul>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">  
+   </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"361"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"list_id"</span><span class="p">:</span><span class="s2">"487"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"Smartphone"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"type_id"</span><span class="p">:</span><span class="s2">"4"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"place_holder"</span><span class="p">:</span><span class="s2">"smartphone"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"options"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"default_value"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"admin_only"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"ord"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"data_type"</span><span class="p">:</span><span class="s2">"boolean"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="custom-fields-get-count">Custom Fields - get count</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/lists/:list_id/customfields/count HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/lists/251338/customfields/count">link</a>  </p>
+
+<ul>
+<li><code class="prettyprint">list_id</code> parameter is the id of the list of which the custom fields have to be counted </li>
+</ul>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">  
+   </span><span class="nt">"totalcount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"8"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="custom-fields-create-instance">Custom Fields - create instance</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">POST https://app.emailchef.com/apps/api/v1/lists/:list_id/customfields  HTTP/1.1</code>  </p>
+
+<ul>
+<li><code class="prettyprint">list_id</code> parameter is the id of the list under which the new custom field has to be created</li>
+</ul>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Request body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">  
+   </span><span class="nt">"instance_in"</span><span class="p">:{</span><span class="w">  
+      </span><span class="nt">"data_type"</span><span class="p">:</span><span class="s2">"boolean"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"Smartphone"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"place_holder"</span><span class="p">:</span><span class="s2">"smartphone"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"default_value"</span><span class="p">:</span><span class="s2">"1"</span><span class="w">
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">  
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"OK"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"custom_field_id"</span><span class="p">:</span><span class="s2">"361"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="custom-fields-update-instance">Custom Fields - update instance</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">PUT https://app.emailchef.com/apps/api/v1/lists/customfields/:field_id  HTTP/1.1</code>  </p>
+
+<ul>
+<li><code class="prettyprint">field_id</code> parameter is the id of the field to update</li>
+</ul>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Request body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">  
+   </span><span class="nt">"instance_in"</span><span class="p">:{</span><span class="w">  
+      </span><span class="nt">"list_id"</span><span class="p">:</span><span class="s2">"487"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"Tablet"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"type_id"</span><span class="p">:</span><span class="s2">"4"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"place_holder"</span><span class="p">:</span><span class="s2">"tablet"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"options"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"default_value"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"admin_only"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"ord"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"data_type"</span><span class="p">:</span><span class="s2">"boolean"</span><span class="w">
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">  
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"OK"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"custom_field_id"</span><span class="p">:</span><span class="s2">"361"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="custom-fields-delete-instance">Custom Fields - delete instance</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">DELETE https://app.emailchef.com/apps/api/v1/customfields/:field_id HTTP/1.1</code>  </p>
+
+<ul>
+<li><code class="prettyprint">field_id</code> parameter is the id of the field to delete</li>
+</ul>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">  
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"OK"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h2 id="blockings-get-collection">Blockings - get collection</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/blockings?query_string=&amp;limit=10&amp;offset=0 HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/blockings?query_string=&amp;limit=10&amp;offset=0">link</a>  </p>
+
+<ul>
+<li><p><code class="prettyprint">query_string</code> parameter is a string to be searched into blocked contacts; all matching contacts will be returned</p></li>
+<li><p><code class="prettyprint">limit</code> parameter is the number of results to return (for a single page), default is 10</p></li>
+<li><p><code class="prettyprint">offset</code> parameter is the number of results to skip prior to start considering results to return, default is 0 </p></li>
+</ul>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<aside class="notice">
+<strong>NOTE:</strong> <em>The response body shown here aside is just a convenient subset of the real whole response.</em>
+</aside> 
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+
+<p>NOTE: <code class="prettyprint">type</code> key can be <code class="prettyprint">MANUAL</code>, <code class="prettyprint">UNSUBSCRIBE</code> or <code class="prettyprint">COMPLAINT</code></p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+   </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"email"</span><span class="p">:</span><span class="s2">"fzancan+404@gmail.com"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"type"</span><span class="p">:</span><span class="s2">"MANUAL"</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="err">...</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+
+<h2 id="blockings-get-count">Blockings - get count</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/blockings/count?query_string= HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/blockings/count?query_string=">link</a>  </p>
+
+<ul>
+<li><code class="prettyprint">query_string</code> parameter is a string to be searched into blocked contacts; all matching contacts will be counted</li>
+</ul>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"totalcount"</span><span class="p">:</span><span class="s2">"100"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="blockings-create-instance">Blockings - create instance</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">POST https://app.emailchef.com/apps/api/v1/blockings?email=:email&amp;type=:type  HTTP/1.1</code>  </p>
+
+<ul>
+<li><p><code class="prettyprint">email</code> parameter is the email address to block</p></li>
+<li><p><code class="prettyprint">type</code> parameter is the type of the block to apply. Can be one of:</p>
+
+<ul>
+<li><code class="prettyprint">MANUAL</code></li>
+<li><code class="prettyprint">UNSUBSCRIBED</code></li>
+<li><code class="prettyprint">COMPLAINT</code></li>
+</ul></li>
+</ul>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"OK"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"address"</span><span class="p">:</span><span class="s2">"fzancan+404@gmail.com"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="blockings-delete-instance">Blockings - delete instance</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">DELETE https://app.emailchef.com/apps/api/v1/blockings/:email HTTP/1.1</code>  </p>
+
+<ul>
+<li><code class="prettyprint">email</code> parameter is the email to be removed from blockings</li>
+</ul>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"OK"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"address"</span><span class="p">:</span><span class="s2">"fzancan+404@gmail.com"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h2 id="import-tasks-get-collection">Import Tasks - get collection</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/importtasks HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/importtasks">link</a>  </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<aside class="notice">
+<strong>NOTE:</strong> <em>The response body shown here aside is just a convenient subset of the real whole response.</em>
+</aside> 
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+   </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"735"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"list_id"</span><span class="p">:</span><span class="s2">"528"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"creation_time"</span><span class="p">:</span><span class="s2">"2015-10-23 12:53:56"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"error_message"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"imported_success"</span><span class="p">:</span><span class="s2">"7"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"imported_fail"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"imported_updated"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"last_updated"</span><span class="p">:</span><span class="s2">"2015-10-23 12:54:00"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"progress"</span><span class="p">:</span><span class="s2">"100"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"COMPLETE"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"uploaded_file_name"</span><span class="p">:</span><span class="s2">"copy_and_paste"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"list_name"</span><span class="p">:</span><span class="s2">"TEST SPAM"</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"724"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"list_id"</span><span class="p">:</span><span class="s2">"514"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"creation_time"</span><span class="p">:</span><span class="s2">"2015-10-23 08:11:43"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"error_message"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"imported_success"</span><span class="p">:</span><span class="s2">"500"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"imported_fail"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"imported_updated"</span><span class="p">:</span><span class="s2">"74"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"last_updated"</span><span class="p">:</span><span class="s2">"2015-10-23 08:11:53"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"progress"</span><span class="p">:</span><span class="s2">"100"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"COMPLETE"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"uploaded_file_name"</span><span class="p">:</span><span class="s2">"B.txt"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"list_name"</span><span class="p">:</span><span class="s2">"SendBlaster PRO 2015 B"</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"723"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"list_id"</span><span class="p">:</span><span class="s2">"513"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"creation_time"</span><span class="p">:</span><span class="s2">"2015-10-23 08:10:27"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"error_message"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"imported_success"</span><span class="p">:</span><span class="s2">"562"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"imported_fail"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"imported_updated"</span><span class="p">:</span><span class="s2">"12"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"last_updated"</span><span class="p">:</span><span class="s2">"2015-10-23 08:10:54"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"progress"</span><span class="p">:</span><span class="s2">"100"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"COMPLETE"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"uploaded_file_name"</span><span class="p">:</span><span class="s2">"A.txt"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"list_name"</span><span class="p">:</span><span class="s2">"SendBlaster PRO 2015 A"</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="err">...</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+
+<h2 id="import-tasks-get-instance-a-k-a-quot-single-task-instant-status-quot">Import Tasks - get instance (a.k.a. &ldquo;single task instant status&rdquo;)</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/importtasks/:task_id HTTP/1.1</code> <a href="https://app.emailchef.com/apps/api/v1/importtasks/743">link</a>  </p>
+
+<ul>
+<li><code class="prettyprint">task_id</code> parameter is the id of the task to be retrieved</li>
+</ul>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"OK"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"progress"</span><span class="p">:</span><span class="s2">"100"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"imported"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"failed"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"updated"</span><span class="p">:</span><span class="s2">"5"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="import-tasks-create-instance-a-k-a-quot-import-contacts-quot">Import Tasks - create instance (a.k.a. &ldquo;import contacts&rdquo;)</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">POST https://app.emailchef.com/apps/api/v1/lists/:list_id/import  HTTP/1.1</code>  </p>
+
+<ul>
+<li><code class="prettyprint">list_id</code> parameter is the id of the list into which new contacts provided y this request should be imported</li>
+</ul>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Request body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"instance_in"</span><span class="p">:{</span><span class="w">
+      </span><span class="nt">"contacts"</span><span class="p">:[</span><span class="w">
+         </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+               </span><span class="nt">"placeholder"</span><span class="p">:</span><span class="s2">"email"</span><span class="p">,</span><span class="w">
+               </span><span class="nt">"value"</span><span class="p">:</span><span class="s2">"fzancan@gmail.com"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+               </span><span class="nt">"placeholder"</span><span class="p">:</span><span class="s2">"first_name"</span><span class="p">,</span><span class="w">
+               </span><span class="nt">"value"</span><span class="p">:</span><span class="s2">"Federico"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+               </span><span class="nt">"placeholder"</span><span class="p">:</span><span class="s2">"last_name"</span><span class="p">,</span><span class="w">
+               </span><span class="nt">"value"</span><span class="p">:</span><span class="s2">"Zancan"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+               </span><span class="nt">"placeholder"</span><span class="p">:</span><span class="s2">"telephone"</span><span class="p">,</span><span class="w">
+               </span><span class="nt">"value"</span><span class="p">:</span><span class="s2">"0123456789"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+         </span><span class="p">],</span><span class="w">
+         </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+               </span><span class="nt">"placeholder"</span><span class="p">:</span><span class="s2">"email"</span><span class="p">,</span><span class="w">
+               </span><span class="nt">"value"</span><span class="p">:</span><span class="s2">"leonardo.perria@gmail.com"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+               </span><span class="nt">"placeholder"</span><span class="p">:</span><span class="s2">"first_name"</span><span class="p">,</span><span class="w">
+               </span><span class="nt">"value"</span><span class="p">:</span><span class="s2">"Leonardo"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+               </span><span class="nt">"placeholder"</span><span class="p">:</span><span class="s2">"last_name"</span><span class="p">,</span><span class="w">
+               </span><span class="nt">"value"</span><span class="p">:</span><span class="s2">"Perria"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+               </span><span class="nt">"placeholder"</span><span class="p">:</span><span class="s2">"telephone"</span><span class="p">,</span><span class="w">
+               </span><span class="nt">"value"</span><span class="p">:</span><span class="s2">"0123456789"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+         </span><span class="p">]</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="nt">"notification_link"</span><span class="p">:</span><span class="s2">"http://usersremotesite.net/notifications/endpoint"</span><span class="w">
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>Just a few words upon the request body you can see here aside.</p>
+
+<p>As you may have noticed, the request body is essentially made of 2 elements:</p>
+
+<ul>
+<li><p><code class="prettyprint">contacts</code> </p></li>
+<li><p><code class="prettyprint">notification_link</code></p></li>
+</ul>
+
+<p>Each entry (or “item”) in <code class="prettyprint">contacts</code> will be made of a collection of placeholder/value couples. So the field is recognized by the specified placeholder. We picked this form instead of the more direct key/value pairs in order to avoid eventual unallowed characters in keys, due to possible system-meaningful characters (such as the dollar sign $) present in placeholders definitions which could screw up later request processing.</p>
+
+<p>Plus, the request will optionally contain a notification_link, with a URL to a user’s remote endpoint ready to receive task termination notifications via HTTP POST method.</p>
+
+<p>It falls under clients’s responsibility if the endpoint URL is wrong, or is somehow unreachable or not ready to receive POST notifications messages. Our process will make 1 and only 1 attempt to send terminal task notification.</p>
+
+<p>If the remote server fails to catch it, the user will anyways conserve the ability to query import tasks status by the “get instance” call described above.</p>
+
+<aside class="notice">
+<strong>NOTE:</strong> <em>`email`, `first_name` and `last_name` fields are ALWAYS mandatory. Any other field is optional.</em>
+</aside> 
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"OK"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"&lt;new-task-id&gt;"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"validation_errors"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"item_index"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> 
+         </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"invalid_email_address"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="err">...</span><span class="w">
+   </span><span class="p">],</span><span class="w">
+   </span><span class="nt">"validation_warnings"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>The <code class="prettyprint">validation_errors</code> and <code class="prettyprint">validation_warnings</code> collections within the response body are made of sets of objects, each composed by an item_index / message couple. The <code class="prettyprint">item_index</code> is the ordinal subscript of the original item within the <code class="prettyprint">contacts</code> collection into the request body. The <code class="prettyprint">message</code> attribute is a synthetic code-wise explanation of the ancountered problem. </p>
+
+<p>Thus, the requesting client will be able to use the task id invoking the “get instance” endpoint in order to query import process status.</p>
+
+<p>In case of validation errors/warnings absence, the validation_errors and / or the validation_warnings property will be an empty array ([]).  Such arrays are provided as a clue for the API client in order to eventually let it grasp the reasons behind contacts import failures shown into the final operation report posted to the remote notification_url  or non-blocking warning conditions at task preparation level. </p>
+
+<aside class="notice">
+<strong>IMPORTANT:</strong> <em>As an optimization, if - after validation phase - the quantity of validation errors is equivalent to the number of contacts the client is trying to import, the task will not even be submitted.</em>
+</aside> 
+
+<p>If a <code class="prettyprint">notification_link</code> is provided within the request, when the importer ends its job it will try to POST a final operations report to that URL.</p>
+
+<p>Such final operations report structure is reported aside.</p>
+
+<blockquote>
+<p>Final operations report:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"successful"</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"failed"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"new"</span><span class="p">:</span><span class="mi">84</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>Obviously, the formula: </p>
+
+<p><code class="prettyprint">(successful + failed) - new</code> </p>
+
+<p>gives a hint on how many contact updates there have been.</p>
+
+          <h1 id="errors">Errors</h1>
+
+<p>The eMailChef API uses the following error codes:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>400</td>
+<td>Bad Request &ndash; Your request sucks</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized &ndash; Your API key is wrong</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden &ndash; The resource requested is hidden for administrators only</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found &ndash; The specified resource could not be found, or it is not accessible for your authorization level</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal Server Error &ndash; We had a problem with our server. Try again later.</td>
+</tr>
+<tr>
+<td>503</td>
+<td>Service Unavailable &ndash; We&rsquo;re temporarially offline for maintanance. Please try again later.</td>
+</tr>
+</tbody></table>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="json">Request/Response details</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
