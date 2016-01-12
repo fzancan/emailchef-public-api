@@ -51,7 +51,7 @@
 
 <h2 id="accessing-resources">Accessing resources</h2>
 
-<p>Authorization to access a user’s resource is granted to clients provided they set a <code class="prettyprint">authkey</code> header into their request, valued with the proper authentication key issued by eMailChef servers. The authentication key is user-based and it is issued by eMailChef servers upon successful user’s email address + password challenge, performed by means of appropriate request (see “Authentication” and “Limitations” section).</p>
+<p>Authorization to access a user’s resource is granted to clients provided they set a <code class="prettyprint">authkey</code> header into their request, valued with the proper authentication key issued by eMailChef servers. The authentication key is user-based and it is issued by eMailChef servers upon successful user’s email address + password challenge, performed by means of appropriate request.</p>
 
 <p>As an example, such header should look like what follows:</p>
 
@@ -2201,7 +2201,7 @@ Content-Type: application/json
 <p>If the remote server fails to catch it, the user will anyways conserve the ability to query import tasks status by the “get instance” call described above.</p>
 
 <aside class="notice">
-<strong>NOTE:</strong> <em>`email`, `first_name` and `last_name` fields are ALWAYS mandatory. Any other field is optional.</em>
+<strong>NOTE:</strong> <em>`email` field is ALWAYS mandatory. Any other field is optional.</em>
 </aside> 
 
 <blockquote>
