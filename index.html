@@ -92,6 +92,45 @@
 
 <p>This section documents those resources which represent a pre-requirement and are necessary for higher level resources to be set and given and functionalities to work properly. </p>
 
+<h2 id="authentication-a-k-a-login">Authentication (a.k.a. login)</h2>
+
+<p>The <code class="prettyprint">authkey</code> value in the response has to be used as a custom header for all requests towards eMailChef&rsquo;s API.</p>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">POST https://app.emailchef.com/api/login HTTP/1.1</code> </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>none
+</code></pre>
+
+<blockquote>
+<p>Request body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"username"</span><span class="p">:</span><span class="s2">"user.email@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"password"</span><span class="p">:</span><span class="s2">"Th3Passw0rd"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"authkey"</span><span class="p">:</span><span class="s2">"3b205f8f12c91d3f937cf87759719cf6f268e5af"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="s2">"login OK"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
 <h2 id="application">Application</h2>
 
 <h3 id="request-endpoint">Request endpoint:</h3>
