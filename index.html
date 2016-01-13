@@ -125,11 +125,19 @@ Content-Type: application/json
 </code></pre>
 
 <blockquote>
-<p>Response body:</p>
+<p>Response body (successful authentication):</p>
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
     </span><span class="nt">"authkey"</span><span class="p">:</span><span class="s2">"3b205f8f12c91d3f937cf87759719cf6f268e5af"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"message"</span><span class="p">:</span><span class="s2">"login OK"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>Response body (unsuccessful authentication):</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="s2">"Credentials wrong"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 
