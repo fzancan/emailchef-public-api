@@ -2147,16 +2147,32 @@ Content-Type: application/json
 </code></pre>
 
 <blockquote>
-<p>Response body:</p>
+<p>Response body (unfinished task):</p>
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
    </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"OK"</span><span class="p">,</span><span class="w">
-   </span><span class="nt">"progress"</span><span class="p">:</span><span class="s2">"100"</span><span class="p">,</span><span class="w">
-   </span><span class="nt">"imported"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"progress"</span><span class="p">:</span><span class="s2">"50"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"imported"</span><span class="p">:</span><span class="s2">"4"</span><span class="p">,</span><span class="w">
    </span><span class="nt">"failed"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
    </span><span class="nt">"updated"</span><span class="p">:</span><span class="s2">"5"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
+
+<blockquote>
+<p>Response body (finished task):</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"OK"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"progress"</span><span class="p">:</span><span class="s2">"100"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"imported"</span><span class="p">:</span><span class="s2">"10"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"failed"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"updated"</span><span class="p">:</span><span class="s2">"5"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<aside class="notice">
+<strong>IMPORTANT:</strong> <em>This request can be reiterated as much times as needed in order to know task progress status.</em>
+</aside> 
 
 <h2 id="import-tasks-create-instance-a-k-a-quot-import-contacts-quot">Import Tasks - create instance (a.k.a. &ldquo;import contacts&rdquo;)</h2>
 
