@@ -813,6 +813,203 @@ Content-Type: application/json
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 
+<h2 id="plans-get-collection">Plans - get collection</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/plans HTTP/1.1</code> </p>
+
+<p>This request does not require authentication </p>
+
+<aside class="notice">
+<strong>NOTE:</strong> <em>The response body shown here aside is just a convenient subset of the real whole response.</em>
+</aside> 
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>none
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+   </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"default"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"prod_ref"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"APPETIZER"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"send_limit"</span><span class="p">:</span><span class="s2">"12000"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"max_contacts"</span><span class="p">:</span><span class="s2">"2000"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"limit_interval"</span><span class="p">:</span><span class="s2">"month"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"ord"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"amount"</span><span class="p">:</span><span class="s2">"FREE"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"currency_symbol"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"currency_code"</span><span class="p">:</span><span class="kc">null</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"9"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"default"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"prod_ref"</span><span class="p">:</span><span class="s2">"4634640"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"BREAKFAST"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"send_limit"</span><span class="p">:</span><span class="s2">"2147483647"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"max_contacts"</span><span class="p">:</span><span class="s2">"1000"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"limit_interval"</span><span class="p">:</span><span class="s2">"month"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"ord"</span><span class="p">:</span><span class="s2">"2"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"amount"</span><span class="p">:</span><span class="s2">"10"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"currency_symbol"</span><span class="p">:</span><span class="s2">"$"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"currency_code"</span><span class="p">:</span><span class="s2">"USD"</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="err">...</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+
+<h2 id="plans-get-instance">Plans - get instance</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/plans/:plan_id HTTP/1.1</code> </p>
+
+<ul>
+<li><code class="prettyprint">plan_id</code> parameter is the id of the plan to retrieve</li>
+</ul>
+
+<p>This request does not require authentication </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>none
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"default"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"prod_ref"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"APPETIZER"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"send_limit"</span><span class="p">:</span><span class="s2">"12000"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"max_contacts"</span><span class="p">:</span><span class="s2">"2000"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"limit_interval"</span><span class="p">:</span><span class="s2">"month"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"ord"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"amount"</span><span class="p">:</span><span class="s2">"FREE"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"currency_symbol"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"currency_code"</span><span class="p">:</span><span class="kc">null</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="packages-get-collection">Packages - get collection</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/packages HTTP/1.1</code> </p>
+
+<p>This request does not require authentication </p>
+
+<aside class="notice">
+<strong>NOTE:</strong> <em>The response body shown here aside is just a convenient subset of the real whole response.</em>
+</aside> 
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>none
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"credits"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2000"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"ord"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"30"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"currency_symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"$"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"currency_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"credits"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5000"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"ord"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"50"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"currency_symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"$"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"currency_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"credits"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10000"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"ord"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"90"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"currency_symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"$"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"currency_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="err">...</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+
+<h2 id="packages-get-instance">Packages - get instance</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/packages/:package_id HTTP/1.1</code> </p>
+
+<ul>
+<li><code class="prettyprint">package_id</code> parameter is the id of the package to retrieve</li>
+</ul>
+
+<p>This request does not require authentication </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>none
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"credits"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5000"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"ord"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"50"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"currency_symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"$"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"currency_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
           <h1 id="resources">Resources</h1>
 
 <p>This section documents all of those resources which are dedicated to users in order to perform operations within eMailChef.</p>
