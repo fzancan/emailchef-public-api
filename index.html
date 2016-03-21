@@ -3458,6 +3458,420 @@ Content-Type: application/json
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 
+          <h2 id="autoresponders-get-count">Autoresponders - get count</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/autoresponders2/count HTTP/1.1</code> </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"totalcount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="autoresponders-get-collection">Autoresponders - get collection</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/autoresponders2?limit=10&amp;offset=0&amp;orderby=n&amp;ordertype=d HTTP/1.1</code> </p>
+
+<ul>
+<li><p><code class="prettyprint">limit</code> parameter is the number of results to return (for a single page), default is 10</p></li>
+<li><p><code class="prettyprint">offset</code> parameter is the number of results to skip prior to start considering results to return, default is 0 </p></li>
+<li><p><code class="prettyprint">orderby</code> parameter can be one of the following:</p>
+
+<ul>
+<li><code class="prettyprint">ct</code>    : creation date</li>
+<li><code class="prettyprint">n</code>     : autoresponder&rsquo;s name</li>
+</ul></li>
+<li><p><code class="prettyprint">ordertype</code> parameter can be one of the following:</p>
+
+<ul>
+<li><code class="prettyprint">a</code>   : ascending</li>
+<li><code class="prettyprint">d</code>   : descending</li>
+</ul></li>
+</ul>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<aside class="notice">
+<strong>NOTE:</strong> <em>The response body shown here aside is just a convenient subset of the real whole response.</em>
+</aside> 
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4578"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"New autoresponder 2016-01-29 11:52:23"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"trigger_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"active"</span><span class="p">:</span><span class="w"> </span><span class="s2">"INACTIVE"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"hours_delay"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"sent"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"open"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"click"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"lists"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="err">...</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+
+<h2 id="autoresponders-get-instance">Autoresponders - get instance</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/autoresponders2/:id HTTP/1.1</code> </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4656"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"785618"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My Autoresponder"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AUTORESPONDER"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"subject"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hi, you are still with us!"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"html_body"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;!DOCTYPE HTML&gt;\n&lt;html&gt;\n&lt;head&gt;\n\n&lt;/head&gt;\n&lt;body&gt;\n\n&lt;/body&gt;&lt;/html&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"text_body"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"sender_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"784"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"template_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"reply_to_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"838"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"sent_count_cache"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"open_count_cache"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"click_count_cache"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"ga_enabled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"ga_campaign_title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"my_ar"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"autoresponder"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4656"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"trigger_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"active"</span><span class="p">:</span><span class="w"> </span><span class="s2">"INACTIVE"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"creation_time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-03-21 10:24:12"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"hours_delay"</span><span class="p">:</span><span class="w"> </span><span class="s2">"24"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"campaign_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4533"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"link_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"custom_field_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"lists"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"list_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"251398"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"segment_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"list_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Test List Zero"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"segment_name"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="autoresponders-create-instance">Autoresponders - create instance</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">POST https://app.emailchef.com/apps/api/v1/autoresponders2 HTTP/1.1</code> </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+Content-Type: application/json; charset=utf-8
+</code></pre>
+
+<blockquote>
+<p>Request body:</p>
+</blockquote>
+<pre class="highlight html"><code>{
+    "instance_in": {
+        "id":null,
+        "name":"My autoresponder",
+        "type":"AUTORESPONDER",
+        "subject":"This is the subject",
+        "html_body":"<span class="nt">&lt;html&gt;&lt;/html&gt;</span>",
+        "text_body":"",
+        "sender_id":"784",
+        "template_id":"",
+        "reply_to_id":"838",
+        "ga_enabled":"1",
+        "ga_campaign_title":"my_ar",
+        "lists":[
+            {
+                "list_id":"251398"
+            }
+        ],
+        "trigger_id":"3",
+        "active":"ACTIVE",
+        "hours_delay":24,
+        "campaign_id":"4533",
+        "link_id":null,
+        "custom_field_id":null
+    }
+}
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OK"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5555"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="autoresponders-update-instance">Autoresponders - update instance</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">PUT https://app.emailchef.com/apps/api/v1/autoresponders2/:id HTTP/1.1</code> </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+Content-Type: application/json; charset=utf-8
+</code></pre>
+
+<blockquote>
+<p>Request body:</p>
+</blockquote>
+<pre class="highlight html"><code>{
+    "instance_in":{
+        "name":"My Autoresponder 2",
+        "type":"AUTORESPONDER",
+        "subject":"This is the subject 2",
+        "html_body":"<span class="nt">&lt;html&gt;&lt;/html&gt;</span>",
+        "text_body":"",
+        "sender_id":"784",
+        "template_id":"38",
+        "reply_to_id":"",
+        "ga_enabled":"1",
+        "ga_campaign_title":"mio_ar",
+        "lists":[
+            {
+                "list_id":"251398"
+            }
+        ],
+        "trigger_id":"3",
+        "active":"INACTIVE",
+        "hours_delay":1,
+        "campaign_id":"4533",
+        "link_id":null,
+        "custom_field_id":null
+    }
+}
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OK"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5555"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="autoresponders-delete-instance">Autoresponders - delete instance</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">DELETE https://app.emailchef.com/apps/api/v1/autoresponders2/:id HTTP/1.1</code> </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OK"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5555"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="autoresponders-send-test-email">Autoresponders - send test email</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">PUT https://app.emailchef.com/apps/api/v1/autoresponders2/:id/sendtest HTTP/1.1</code> </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+Content-Type: application/json; charset=utf-8
+</code></pre>
+
+<blockquote>
+<p>Request body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"instance_in"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"myaccount@gmail.com"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OK"</span><span class="p">,</span><span class="w">
+</span><span class="err">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="autoresponders-activate">Autoresponders - activate</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">PUT https://app.emailchef.com/apps/api/v1/autoresponders2/:id/activate HTTP/1.1</code> </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OK"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"autoresponder_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5555"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="autoresponders-deactivate">Autoresponders - deactivate</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">PUT https://app.emailchef.com/apps/api/v1/autoresponders2/:id/deactivate HTTP/1.1</code> </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OK"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"autoresponder_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5555"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="autoresponders-clone">Autoresponders - clone</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">PUT https://app.emailchef.com/apps/api/v1/autoresponders2/:id/clone HTTP/1.1</code> </p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OK"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;new autoresponder id&gt;"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
           <h1 id="errors">Errors</h1>
 
 <p>The eMailChef API uses the following error codes:</p>
