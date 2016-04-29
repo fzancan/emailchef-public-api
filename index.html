@@ -818,9 +818,18 @@ Content-Type: application/json
 
 <h3 id="request-endpoint">Request endpoint:</h3>
 
-<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/plans HTTP/1.1</code> </p>
+<p><code class="prettyprint">GET https://app.emailchef.com/apps/api/v1/plans?billing_cycle=:billing_cycle HTTP/1.1</code> </p>
 
 <p>This request does not require authentication </p>
+
+<ul>
+<li><p><code class="prettyprint">billing_cycle</code> parameter is optional and can be one of the following:</p>
+
+<ul>
+<li><code class="prettyprint">month</code> - [DEFAULT] only plans with monthly billing cycle are returned, together with the free plan</li>
+<li><code class="prettyprint">year</code> - only plans with yearly billing cycle are returned</li>
+</ul></li>
+</ul>
 
 <aside class="notice">
 <strong>NOTE:</strong> <em>The response body shown here aside is just a convenient subset of the real whole response.</em>
