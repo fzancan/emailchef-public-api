@@ -4215,6 +4215,75 @@ Content-Type: application/json
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
 
+          <h2 id="send-mail">Send Mail</h2>
+
+<h3 id="request-endpoint">Request endpoint:</h3>
+
+<p><code class="prettyprint">POST https://app.emailchef.com/apps/api/v1/sendmail HTTP/1.1</code>   </p>
+
+<p>This resource allows the user to send an email to an arbitrary contact, through eMailChef&rsquo;s SMTP server.</p>
+
+<p>Actually, and if not differently agreed upon, there&rsquo;s a limit of 1000 emails sent per day.</p>
+
+<p>Emails sent through this interface are also listed into the profile&rsquo;s &ldquo;My Activities&rdquo; panel.</p>
+
+<blockquote>
+<p>Request headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>authkey: &lt;your_authentication_key&gt;
+</code></pre>
+
+<blockquote>
+<p>Request body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"instance_in"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"sender_id"</span><span class="p">:</span><span class="w"> </span><span class="err">nnnn</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"recipient@hisdomain.com"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Smith"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"subject"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Subject here"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"text_body"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Plain text body here"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"html_body"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Full HTML body here"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>Response headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+</code></pre>
+
+<blockquote>
+<p>Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OK"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>Error Response body:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERROR"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sender_not_verified"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERROR"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sender_not_found"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERROR"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"send_limit_exceeded"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
           <h1 id="errors">Errors</h1>
 
 <p>The eMailChef API uses the following error codes:</p>
