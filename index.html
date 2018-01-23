@@ -4223,6 +4223,8 @@ Content-Type: application/json
 
 <p>Emails sent through this interface are also listed into the profile&rsquo;s &ldquo;My Activities&rdquo; panel.</p>
 
+<p>The <code class="prettyprint">reply_to</code> request member is optional.</p>
+
 <blockquote>
 <p>Request headers:</p>
 </blockquote>
@@ -4241,7 +4243,8 @@ Content-Type: application/json
     </span><span class="p">},</span><span class="w">
     </span><span class="nt">"subject"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Subject here"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"text_body"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Plain text body here"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"html_body"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Full HTML body here"</span><span class="w">
+    </span><span class="nt">"html_body"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Full HTML body here"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"reply_to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"reply-to-address@otherdomain.com"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
